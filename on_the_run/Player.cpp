@@ -4,8 +4,8 @@
 
 Player::Player()
 	: movement(sf::Vector2f(0.f, 0.f)),
-	maxSpeedForward(400.f),
-	maxSpeedBackwards(100.f),
+	maxSpeedForward(40.f),
+	maxSpeedBackwards(10.f),
 	movementSpeed(0.f),
 	pIsMovingUp(false),
 	pIsMovingDown(false),
@@ -14,11 +14,11 @@ Player::Player()
 	currentFrame(0),
 	frameCounter(0)
 {
-	mPlayerTexture.loadFromFile("bin/Debug/res/player/PlayerMovingSpriteSheet.png");// Location of sprite
+	mPlayerTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/player/PlayerMovingSpriteSheet.png");// Location of sprite
 	// Setting player sprite position and size
 	mPlayer.setTexture(mPlayerTexture);
 	mPlayer.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet
-	mPlayer.setScale(sf::Vector2f(10, 10));
+	mPlayer.setScale(sf::Vector2f(0.4, 0.4));
 	mPlayer.setOrigin(sf::Vector2f(15, 8));
 	mPlayer.setPosition(100.f, 100.f);
 }
@@ -98,7 +98,7 @@ void Player::updateMovement(sf::Time deltaTime)
 		updateAnimationMovement();
 		updateAccelleration(deltaTime);
 	}
-	// Rotates the sprite to turn in the corrosponding directions
+	// Rotates the sprite to turn in the corresponding directions
 	if (pIsMovingLeft && movementSpeed > 0)
 	{
 		if (movement.y < 0)
@@ -124,6 +124,7 @@ void Player::updateMovement(sf::Time deltaTime)
 		move(deltaTime);
 	}
 }
+
 
 void Player::move(sf::Time deltaTime)
 {
