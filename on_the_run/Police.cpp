@@ -9,14 +9,14 @@ static sf::Texture mPoliceTexture;
 Police::Police()
 	: currentFrame(0),
 	frameCounter(0),
-	aiSpeed(300.f),
+	aiSpeed(40.f),
 	aiTurnSpeed(90.f),
 	mRotation(0.f),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("bin/Debug/res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/police/PoliceMovingSpriteSheet.png"))
 	{
-		std::cerr << "Error loading police texture" << std::endl;
+		std::cerr << "Error loading the police texture" << std::endl;
 	}
 	else
 	{
@@ -24,7 +24,7 @@ Police::Police()
 	}// Location of sprite
 	// Setting police sprite position and size
 	mPolice.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet
-	mPolice.setScale(sf::Vector2f(10, 10));
+	mPolice.setScale(sf::Vector2f(1, 1));
 	mPolice.setOrigin(sf::Vector2f(15, 8));
 	mPolice.setPosition(1000.f, 1000.f);
 }
@@ -32,14 +32,14 @@ Police::Police()
 Police::Police(sf::Vector2f startPosition, float startRotation = 0.f)
 	: currentFrame(0),
 	frameCounter(0),
-	aiSpeed(300.f),
+	aiSpeed(40.f),
 	aiTurnSpeed(90.f),
 	mRotation(startRotation),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("bin/Debug/res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/police/PoliceMovingSpriteSheet.png"))
 	{
-		std::cerr << "Error loading police texture" << std::endl;
+		std::cerr << "Error loading a police texture" << std::endl;
 	}
 	else
 	{
@@ -47,7 +47,7 @@ Police::Police(sf::Vector2f startPosition, float startRotation = 0.f)
 	}// Location of sprite
 	// Setting police sprite position and size
 	mPolice.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet
-	mPolice.setScale(sf::Vector2f(10, 10));
+	mPolice.setScale(sf::Vector2f(0.4, 0.4));
 	mPolice.setOrigin(sf::Vector2f(15, 8));
 	mPolice.setPosition(startPosition);
 }
@@ -89,30 +89,26 @@ void Police::followPlayer(const Player& player, float deltaTime)
 {
 	sf::Vector2f direction = player.getPosition() - mPolice.getPosition();
 	float angleToPlayer = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
-
 	angleToPlayer += 90.f;
 
-	float angleDifference = normalizeAngle(angleToPlayer - mRotation);
+	float angleDifference = angleToPlayer - mRotation;
 
 	if (std::abs(angleDifference) > 1.f)
 	{
 		if (angleDifference > 0)
-		{
 			mRotation += aiTurnSpeed * deltaTime;
-		}
 		else
-		{
 			mRotation -= aiTurnSpeed * deltaTime;
-		}
+
 		mRotation = normalizeAngle(mRotation);
 	}
 	else
 	{
-		float radianRotation = (mRotation - 90.f) * degreseToRadian;
+		float radianRotation = (mRotation - 90.f) * (3.14159265f / 180.f);
 		sf::Vector2f velocity(std::cos(radianRotation) * aiSpeed,
 			std::sin(radianRotation) * aiSpeed);
 		mPolice.move(velocity * deltaTime);
-		updateAnimationMovement();
 	}
+
 	mPolice.setRotation(mRotation);
 }
