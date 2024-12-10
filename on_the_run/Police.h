@@ -16,6 +16,8 @@ public:
 	void updateAnimationMovement();
 	void followPlayer(const Player& player, float deltaTime);
 
+
+
 	sf::Sprite& getSprite() { return mPolice; }
 
 private:
