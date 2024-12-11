@@ -17,15 +17,56 @@ Game::Game()
     }
     mBackgroundSprite.setTexture(mBackgroundTexture);
 
+    if (!path.loadFromFile("res/Background/path.png"))
+    {
+        std::cerr << "Error loading path" << std::endl;
+    }
+
+    mapCollision();
+
     mView.setSize(1920.f, 1080.f); // Initialize to the window size
     mView.setCenter(mPlayer.getPosition()); // Center on the player
     mView.setSize(1920.f / 8.f, 1080.f / 8.f); // Zoom in (adjust divisor as needed)
 
-    mapBounds = sf::FloatRect(0.f, 0.f, 1200.f, 700.f); // Adjust dimensions to your map size
+    mapBounds = sf::FloatRect(0.f, 0.f, path.getSize().x, path.getSize().y); // Adjust dimensions to your map size
 
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(400.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 400.f), 0.f);
+}
+
+void Game::mapCollision()
+{
+    collisionGrid.resize(path.getSize().x, std::vector<bool>(path.getSize().y, false));
+
+    for (unsigned x = 0; x < path.getSize().x; ++x)
+    {
+        for (unsigned y = 0; y < path.getSize().y; ++y)
+        {
+            sf::Color pixelColor = path.getPixel(x, y);
+            collisionGrid[x][y] = (pixelColor.r > 200 && pixelColor.g > 200 && pixelColor.b > 200);
+        }
+    }
+}
+
+bool Game::checkPosition(const sf::Vector2f& position)
+{
+    sf::Vector2u pixelPos(static_cast<unsigned>(position.x), static_cast<unsigned>(position.y));
+    if (pixelPos.x >= path.getSize().x || pixelPos.y >= path.getSize().y)
+    {
+        return false;
+    }
+
+    sf::Color pixelColor = path.getPixel(pixelPos.x, pixelPos.y);
+    return (pixelColor.r > 200 && pixelColor.g > 200 && pixelColor.b > 200);
+}
+
+bool Game::checkPositionFast(const sf::Vector2f& position)
+{
+    unsigned x = static_cast<unsigned>(position.x);
+    unsigned y = static_cast<unsigned>(position.y);
+
+    return (x < collisionGrid.size() && y < collisionGrid[0].size() && collisionGrid[x][y]);
 }
 
 void Game::run()
@@ -69,7 +110,13 @@ void Game::processEvents()
 
 void Game::update(sf::Time deltaTime)
 {
+    sf::Vector2f newPosition = mPlayer.getPosition();
     mPlayer.updateMovement(deltaTime);
+
+    if (!checkPositionFast(mPlayer.getPosition()))
+    {
+        mPlayer.setPosition(newPosition);
+    }
 
     for (auto& police : policeCars)
     {

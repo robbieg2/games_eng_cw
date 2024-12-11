@@ -7,6 +7,8 @@ class Player {
 public:
     Player();
 
+    void setPosition(const sf::Vector2f& position) {mPlayer.setPosition(position);};
+
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     void updateAnimationMovement();

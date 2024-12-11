@@ -92,6 +92,7 @@ void Police::followPlayer(const Player& player, float deltaTime)
 	angleToPlayer += 90.f;
 
 	float angleDifference = angleToPlayer - mRotation;
+	angleDifference = normalizeAngle(angleDifference);
 
 	if (std::abs(angleDifference) > 1.f)
 	{

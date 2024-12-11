@@ -20,7 +20,7 @@ Player::Player()
 	mPlayer.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet
 	mPlayer.setScale(sf::Vector2f(0.4, 0.4));
 	mPlayer.setOrigin(sf::Vector2f(15, 8));
-	mPlayer.setPosition(100.f, 100.f);
+	mPlayer.setPosition(100.f, 325.f);
 }
 
 void Player::handlePlayerInput(sf::Keyboard::Key key,

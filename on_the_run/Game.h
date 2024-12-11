@@ -13,6 +13,10 @@ private:
     void processEvents();
     void update(sf::Time deltaTime);
     void render();
+    void mapCollision();
+
+    bool checkPosition(const sf::Vector2f& position);
+    bool checkPositionFast(const sf::Vector2f& position);
 
 private:
     sf::RenderWindow mWindow;
@@ -20,6 +24,9 @@ private:
 
     sf::Texture mBackgroundTexture;
     sf::Sprite mBackgroundSprite;
+
+    sf::Image path;
+    std::vector<std::vector<bool>> collisionGrid;
 
     std::vector<Police> policeCars;
 
