@@ -14,7 +14,7 @@ Police::Police()
 	mRotation(0.f),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("res/police/PoliceMovingSpriteSheet.png"))
 	{
 		std::cerr << "Error loading the police texture" << std::endl;
 	}
@@ -37,7 +37,7 @@ Police::Police(sf::Vector2f startPosition, float startRotation = 0.f)
 	mRotation(startRotation),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("res/police/PoliceMovingSpriteSheet.png"))
 	{
 		std::cerr << "Error loading a police texture" << std::endl;
 	}

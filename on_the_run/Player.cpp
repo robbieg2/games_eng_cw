@@ -14,7 +14,7 @@ Player::Player()
 	currentFrame(0),
 	frameCounter(0)
 {
-	mPlayerTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/player/PlayerMovingSpriteSheet.png");// Location of sprite
+	mPlayerTexture.loadFromFile("res/player/PlayerMovingSpriteSheet.png");// Location of sprite
 	// Setting player sprite position and size
 	mPlayer.setTexture(mPlayerTexture);
 	mPlayer.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet

@@ -20,7 +20,7 @@ link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 file(GLOB_RECURSE SOURCES on_the_run/*.cpp on_the_run/*.h)
 add_executable(ON_THE_RUN ${SOURCES})
 target_include_directories(ON_THE_RUN PRIVATE ${SFML_INCS})
-target_link_libraries(ON_THE_RUN sfml-graphics)
+target_link_libraries(ON_THE_RUN sfml-graphics sfml-window sfml-system)
 
 set_target_properties(ON_THE_RUN
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY

@@ -3,13 +3,15 @@
 #include "Police.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <windows.h>
+#include <vector>
 
 Game::Game()
     : mWindow(sf::VideoMode(1920, 1080), "On The Run") // Sets screen size and title
     , TimePerFrame(sf::seconds(1.f / 60.f))
 {
     mWindow.setFramerateLimit(60);
-    if (!mBackgroundTexture.loadFromFile("C:/Users/finga/OneDrive/Documents/BEng-Computing/3rd-Year/Games/games_5/games_eng_cw/res/Background/fullmap.png"))
+    if (!mBackgroundTexture.loadFromFile("res/Background/fullmap.png"))
     {
         std::cerr << "Error loading background texture" << std::endl;
     }
