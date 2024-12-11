@@ -37,7 +37,7 @@ Police::Police(sf::Vector2f startPosition, float startRotation = 0.f)
 	mRotation(startRotation),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("res/police/HelicopterSpriteSheet.png"))
 	{
 		std::cerr << "Error loading a police texture" << std::endl;
 	}
