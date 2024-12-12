@@ -12,7 +12,7 @@ Game::Game()
 {
     mWindow.setFramerateLimit(60);
 
-    // Load background texture
+    // loads the texture and throws an error if it does not load
     if (!mBackgroundTexture.loadFromFile("res/Background/fullmap.png")) {
         std::cerr << "Error loading background texture" << std::endl;
     }
@@ -23,7 +23,7 @@ Game::Game()
         std::cerr << "Error loading path" << std::endl;
     }
 
-    // Load menu texture
+    
     if (!menuTexture.loadFromFile("res/Background/menu.png")) {
         std::cerr << "Error loading menu image" << std::endl;
     }
@@ -40,21 +40,21 @@ Game::Game()
 
     mapCollision();
 
-    // Configure view (camera)
+    // camera settings
     mView.setSize(1920.f, 1080.f);
     mView.setCenter(mPlayer.getPosition());
     mView.setSize(1920.f / 8.f, 1080.f / 8.f);
 
-    // Set map boundaries
-    mapBounds = sf::FloatRect(0.f, 0.f, path.getSize().x, path.getSize().y); // Adjust dimensions to your map size
+    // sets the maps boundaries
+    mapBounds = sf::FloatRect(0.f, 0.f, path.getSize().x, path.getSize().y); 
 
-    // Spawn police cars
+    // spawns in 3 police cars at different places on the map
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(400.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 400.f), 0.f);
 
-    // Define interactive areas for the buttons
-    playButtonArea = sf::IntRect(50, 200, 900, 450); // dimensions of menu buttons
+    // creates the interactive areas for the menu buttons
+    playButtonArea = sf::IntRect(50, 200, 900, 450);
     quitButtonArea = sf::IntRect(50, 600, 900, 450); 
 
 }
@@ -180,26 +180,27 @@ void Game::update(sf::Time deltaTime)
 
 void Game::render()
 {
-    mWindow.clear(); // Clear the window
+    mWindow.clear();
 
+    // if the menu is open, draws menu, if not then draws the background, player and police
     if (isMenuActive) {
-        mWindow.setView(mWindow.getDefaultView()); // Reset the view to default for menu
-        mWindow.draw(menuSprite); // Draw the menu fullscreen
+        mWindow.setView(mWindow.getDefaultView());
+        mWindow.draw(menuSprite);
     }
     else {
-        mWindow.setView(mView); // Set the game camera view
-        mWindow.draw(mBackgroundSprite); // Draw the game background
-        mWindow.draw(mPlayer.getSprite()); // Draw the player sprite
+        mWindow.setView(mView);
+        mWindow.draw(mBackgroundSprite);
+        mWindow.draw(mPlayer.getSprite());
 
         for (const auto& police : policeCars) {
-            police.draw(mWindow); // Draw each police car
+            police.draw(mWindow);
         }
 
     }
 
     
 
-    mWindow.display(); // Display the rendered frame
+    mWindow.display();
 }
 
 
