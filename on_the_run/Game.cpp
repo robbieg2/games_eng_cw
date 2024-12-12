@@ -11,8 +11,9 @@ Game::Game()
     , TimePerFrame(sf::seconds(1.f / 60.f))
 {
     mWindow.setFramerateLimit(60);
-    if (!mBackgroundTexture.loadFromFile("res/Background/fullmap.png"))
-    {
+
+    // loads the texture and throws an error if it does not load
+    if (!mBackgroundTexture.loadFromFile("res/Background/fullmap.png")) {
         std::cerr << "Error loading background texture" << std::endl;
     }
     mBackgroundSprite.setTexture(mBackgroundTexture);
@@ -22,17 +23,40 @@ Game::Game()
         std::cerr << "Error loading path" << std::endl;
     }
 
+    
+    if (!menuTexture.loadFromFile("res/Background/menu.png")) {
+        std::cerr << "Error loading menu image" << std::endl;
+    }
+    else {
+        menuSprite.setTexture(menuTexture);
+
+        // Scale the menu sprite to fit 1920x1080
+        float menuScaleX = static_cast<float>(1920) / menuTexture.getSize().x;
+        float menuScaleY = static_cast<float>(1080) / menuTexture.getSize().y;
+        menuSprite.setScale(menuScaleX, menuScaleY);
+        menuSprite.setPosition(0, 0); // puts menu in top corner
+    }
+
+
     mapCollision();
 
-    mView.setSize(1920.f, 1080.f); // Initialize to the window size
-    mView.setCenter(mPlayer.getPosition()); // Center on the player
-    mView.setSize(1920.f / 8.f, 1080.f / 8.f); // Zoom in (adjust divisor as needed)
+    // camera settings
+    mView.setSize(1920.f, 1080.f);
+    mView.setCenter(mPlayer.getPosition());
+    mView.setSize(1920.f / 8.f, 1080.f / 8.f);
 
-    mapBounds = sf::FloatRect(0.f, 0.f, path.getSize().x, path.getSize().y); // Adjust dimensions to your map size
+    // sets the maps boundaries
+    mapBounds = sf::FloatRect(0.f, 0.f, path.getSize().x, path.getSize().y); 
 
+    // spawns in 3 police cars at different places on the map
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(400.f, 1000.f), 0.f);
     spawnPoliceCar(policeCars, sf::Vector2f(1000.f, 400.f), 0.f);
+
+    // creates the interactive areas for the menu buttons
+    playButtonArea = sf::IntRect(50, 200, 900, 450);
+    quitButtonArea = sf::IntRect(50, 600, 900, 450); 
+
 }
 
 void Game::mapCollision()
@@ -69,6 +93,7 @@ bool Game::checkPositionFast(const sf::Vector2f& position)
     return (x < collisionGrid.size() && y < collisionGrid[0].size() && collisionGrid[x][y]);
 }
 
+
 void Game::run()
 {
     sf::Clock clock;
@@ -81,8 +106,9 @@ void Game::run()
         while (timeSinceLastUpdate > TimePerFrame)
         {
             timeSinceLastUpdate -= TimePerFrame;
-            processEvents();
-            update(TimePerFrame);
+            if (!isMenuActive) {
+                update(TimePerFrame);
+            }
         }
         render();
     }
@@ -93,17 +119,35 @@ void Game::processEvents()
     sf::Event event;
     while (mWindow.pollEvent(event))
     {
-        switch (event.type)
-        {
-        case sf::Event::KeyPressed:
-            mPlayer.handlePlayerInput(event.key.code, true);
-            break;
-        case sf::Event::KeyReleased:
-            mPlayer.handlePlayerInput(event.key.code, false);
-            break;
-        case sf::Event::Closed:
+        if (event.type == sf::Event::Closed) {
             mWindow.close();
-            break;
+        }
+
+        // Debug: Check menu state
+        std::cout << "Is Menu Active (processEvents): " << isMenuActive << std::endl;
+
+        if (isMenuActive) {
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
+                std::cout << "Mouse Position: " << mousePos.x << ", " << mousePos.y << std::endl;
+
+                if (playButtonArea.contains(mousePos)) {
+                    std::cout << "Play button clicked!" << std::endl;
+                    isMenuActive = false; // Start the game
+                }
+                else if (quitButtonArea.contains(mousePos)) {
+                    std::cout << "Quit button clicked!" << std::endl;
+                    mWindow.close(); // Exit the game
+                }
+            }
+        }
+        else {
+            if (event.type == sf::Event::KeyPressed) {
+                mPlayer.handlePlayerInput(event.key.code, true);
+            }
+            else if (event.type == sf::Event::KeyReleased) {
+                mPlayer.handlePlayerInput(event.key.code, false);
+            }
         }
     }
 }
@@ -128,15 +172,7 @@ void Game::update(sf::Time deltaTime)
     float halfWidth = mView.getSize().x / 2.f;
     float halfHeight = mView.getSize().y / 2.f;
 
-    if (viewCenter.x - halfWidth < mapBounds.left)
-        viewCenter.x = mapBounds.left + halfWidth;
-    if (viewCenter.x + halfWidth > mapBounds.left + mapBounds.width)
-        viewCenter.x = mapBounds.left + mapBounds.width - halfWidth;
-
-    if (viewCenter.y - halfHeight < mapBounds.top)
-        viewCenter.y = mapBounds.top + halfHeight;
-    if (viewCenter.y + halfHeight > mapBounds.top + mapBounds.height)
-        viewCenter.y = mapBounds.top + mapBounds.height - halfHeight;
+   
 
     mView.setCenter(viewCenter);
     mWindow.setView(mView);
@@ -145,16 +181,26 @@ void Game::update(sf::Time deltaTime)
 void Game::render()
 {
     mWindow.clear();
-    mWindow.setView(mView);
 
-    mWindow.draw(mBackgroundSprite);
-    mWindow.draw(mPlayer.getSprite());
-
-    for (const auto& police : policeCars)
-    {
-        police.draw(mWindow);
+    // if the menu is open, draws menu, if not then draws the background, player and police
+    if (isMenuActive) {
+        mWindow.setView(mWindow.getDefaultView());
+        mWindow.draw(menuSprite);
     }
+    else {
+        mWindow.setView(mView);
+        mWindow.draw(mBackgroundSprite);
+        mWindow.draw(mPlayer.getSprite());
+
+        for (const auto& police : policeCars) {
+            police.draw(mWindow);
+        }
+
+    }
+
+    
 
     mWindow.display();
 }
+
 

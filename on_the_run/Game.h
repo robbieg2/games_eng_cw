@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Police.h"
+#include <vector>
 
 class Game
 {
@@ -14,7 +15,6 @@ private:
     void update(sf::Time deltaTime);
     void render();
     void mapCollision();
-
     bool checkPosition(const sf::Vector2f& position);
     bool checkPositionFast(const sf::Vector2f& position);
 
@@ -33,11 +33,16 @@ private:
     Player mPlayer;
     Police mPolice;
 
-    sf::View mView; // View for camera
-    sf::FloatRect mapBounds; // Map bounds for clamping
+    sf::View mView; 
+    sf::FloatRect mapBounds; 
+
+   
+    bool isMenuActive = true;
+    sf::Texture menuTexture; 
+    sf::Sprite menuSprite; 
+    sf::IntRect playButtonArea; 
+    sf::IntRect quitButtonArea;
 };
-
-
 
 
 int main()

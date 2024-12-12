@@ -14,14 +14,14 @@ Player::Player()
 	currentFrame(0),
 	frameCounter(0)
 {
-	mPlayerTexture.loadFromFile("res/player/PlayerMovingSpriteSheet.png");// Location of sprite
-	// Setting player sprite position and size
+	mPlayerTexture.loadFromFile("res/player/PlayerMovingSpriteSheet.png");// directory of player.png
 	mPlayer.setTexture(mPlayerTexture);
-	mPlayer.setTextureRect(sf::IntRect(0, 0, 30, 30));// Takes a portion of the sprite sheet
+	mPlayer.setTextureRect(sf::IntRect(0, 0, 30, 30));// takes a portion of the sprite sheet
 	mPlayer.setScale(sf::Vector2f(0.4, 0.4));
 	mPlayer.setOrigin(sf::Vector2f(15, 8));
-	mPlayer.setPosition(100.f, 325.f);
+	mPlayer.setPosition(945.f, 100.f);
 }
+
 
 void Player::handlePlayerInput(sf::Keyboard::Key key,
 	bool isPressed)

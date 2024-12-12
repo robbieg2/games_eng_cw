@@ -14,7 +14,7 @@ Police::Police()
 	mRotation(0.f),
 	degreseToRadian(3.14159265f / 180.f)
 {
-	if (!mPoliceTexture.loadFromFile("res/police/PoliceMovingSpriteSheet.png"))
+	if (!mPoliceTexture.loadFromFile("res/police/HelicopterSpriteSheet.png"))
 	{
 		std::cerr << "Error loading the police texture" << std::endl;
 	}
