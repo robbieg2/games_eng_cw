@@ -33,15 +33,15 @@ private:
     Player mPlayer;
     Police mPolice;
 
-    sf::View mView; // View for camera
-    sf::FloatRect mapBounds; // Map bounds for clamping
+    sf::View mView; 
+    sf::FloatRect mapBounds; 
 
-    // Menu-related variables
-    bool isMenuActive = true; // Determines if the menu is displayed
-    sf::Texture menuTexture; // Texture for the menu
-    sf::Sprite menuSprite; // Sprite for the menu
-    sf::IntRect playButtonArea; // Area for the "PLAY" button
-    sf::IntRect quitButtonArea; // Area for the "QUIT" button
+   
+    bool isMenuActive = true;
+    sf::Texture menuTexture; 
+    sf::Sprite menuSprite; 
+    sf::IntRect playButtonArea; 
+    sf::IntRect quitButtonArea;
 };
 
 
